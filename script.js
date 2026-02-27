@@ -35,6 +35,7 @@ let words = [];
 let currentWord = "";
 let score = 0;
 let index = 0;
+let answered = false;   // ✅ prevents double scoring
 
 // Shuffle words
 function shuffle(array) {
@@ -46,6 +47,8 @@ function startGame() {
     words = shuffle(Object.keys(wordDatabase));
     score = 0;
     index = 0;
+    answered = false;
+
     document.getElementById("guessInput").value = "";
     document.getElementById("result").innerText = "";
     displayWord();
@@ -63,6 +66,7 @@ function displayWord() {
     }
 
     currentWord = words[index];
+    answered = false;  // ✅ reset for new word
 
     let first = currentWord[0];
     let last = currentWord[currentWord.length - 1];
@@ -79,8 +83,10 @@ function displayWord() {
     document.getElementById("score").innerText = "Score: " + score;
 }
 
-// Check answer (case insensitive)
+// Check answer
 function checkGuess() {
+
+    if (answered) return;   // ✅ stops double scoring
 
     let guess = document.getElementById("guessInput")
                     .value
@@ -96,6 +102,8 @@ function checkGuess() {
     }
 
     document.getElementById("score").innerText = "Score: " + score;
+
+    answered = true;   // ✅ lock after first attempt
 }
 
 // Next word
