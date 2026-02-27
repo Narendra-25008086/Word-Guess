@@ -1,33 +1,62 @@
 const wordDatabase = {
-    "ALGORITHM": "A structured set of instructions.",
-    "BANDWIDTH": "Capacity for data transfer.",
-    "CHASSIS": "Base frame of a vehicle.",
-    "ENTANGLEMENT": "Complex quantum relationship.",
-    "GENERATIVE": "Capable of producing.",
-    "MATRIX": "Rectangular array of numbers.",
-    "PYTHON": "Programming language.",
-    "QUANTUM": "Smallest physical quantity.",
-    "SUPERPOSITION": "One thing placed over another.",
-    "THERMODYNAMICS": "Study of heat and energy.",
-    "DATABASE": "Organized collection of data.",
-    "FUNCTION": "Reusable block of code.",
-    "VARIABLE": "Container for storing data.",
-    "NETWORK": "Connected systems."
+    "algorithm": "A structured set of instructions.",
+    "bandwidth": "Capacity for data transfer.",
+    "chassis": "Base frame of a vehicle.",
+    "entanglement": "Complex quantum relationship.",
+    "generative": "Capable of producing.",
+    "matrix": "Rectangular array of numbers.",
+    "python": "Programming language.",
+    "quantum": "Smallest physical quantity.",
+    "superposition": "One thing placed over another.",
+    "thermodynamics": "Study of heat and energy.",
+    "database": "Organized collection of data.",
+    "function": "Reusable block of code.",
+    "variable": "Container for storing data.",
+    "network": "Connected systems.",
+    "compiler": "Translates source code to machine code.",
+    "iteration": "Repeating a process.",
+    "recursion": "Function calling itself.",
+    "encryption": "Securing data using codes.",
+    "firewall": "Network security system.",
+    "protocol": "Set of communication rules.",
+    "debugging": "Finding and fixing errors.",
+    "hardware": "Physical parts of computer.",
+    "software": "Programs and applications.",
+    "interface": "Connection between systems.",
+    "artificial": "Made by humans, not natural.",
+    "intelligence": "Ability to learn and reason.",
+    "machine": "Device that performs tasks.",
+    "learning": "Process of gaining knowledge.",
+    "neural": "Related to nerves or networks.",
+    "analysis": "Detailed examination of data."
 };
 
-let words = Object.keys(wordDatabase);
+let words = [];
 let currentWord = "";
 let score = 0;
 let index = 0;
 
+// Shuffle words
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
+// Start or Restart Game
+function startGame() {
+    words = shuffle(Object.keys(wordDatabase));
+    score = 0;
+    index = 0;
+    document.getElementById("guessInput").value = "";
+    document.getElementById("result").innerText = "";
+    displayWord();
+}
+
+// Display word
 function displayWord() {
 
     if (index >= words.length) {
-        document.getElementById("wordDisplay").innerText = "Game Over!";
+        document.getElementById("wordDisplay").innerText = "🎉 Game Over!";
+        document.getElementById("hint").innerText = "";
         document.getElementById("score").innerText =
             "Final Score: " + score + " / " + words.length;
         return;
@@ -40,7 +69,8 @@ function displayWord() {
     let blanks = "_ ".repeat(currentWord.length - 2);
 
     document.getElementById("wordDisplay").innerText =
-        `Word: ${first} ${blanks} ${last} (${currentWord.length} letters)`;
+        "Word: " + first + " " + blanks + last +
+        " (" + currentWord.length + " letters)";
 
     document.getElementById("hint").innerText =
         "Hint: " + wordDatabase[currentWord];
@@ -49,11 +79,15 @@ function displayWord() {
     document.getElementById("score").innerText = "Score: " + score;
 }
 
+// Check answer (case insensitive)
 function checkGuess() {
 
-    let guess = document.getElementById("guessInput").value.toUpperCase();
+    let guess = document.getElementById("guessInput")
+                    .value
+                    .trim()
+                    .toLowerCase();
 
-    if (guess === currentWord) {
+    if (guess === currentWord.toLowerCase()) {
         document.getElementById("result").innerText = "✅ Correct!";
         score++;
     } else {
@@ -64,11 +98,12 @@ function checkGuess() {
     document.getElementById("score").innerText = "Score: " + score;
 }
 
+// Next word
 function nextWord() {
     index++;
     document.getElementById("guessInput").value = "";
     displayWord();
 }
 
-words = shuffle(words);
-displayWord();
+// Auto start game
+startGame();
